@@ -128,7 +128,8 @@ class MuMgr(object):
 		up = {'enable': 1, 'u': 0, 'd': 0, 'method': "aes-128-ctr",
 		'protocol': "auth_aes128_md5",
 		'obfs': "tls1.2_ticket_auth_compatible",
-		'transfer_enable': 9007199254740992}
+		'transfer_enable': 9007199254740992,
+		'month': 0}
 		up['passwd'] = self.rand_pass()
 		up.update(user)
 
@@ -180,15 +181,20 @@ class MuMgr(object):
 	def clear_ud(self, user):
 		up = {'u': 0, 'd': 0}
 		self.data.load(self.config_path)
-		for row in self.data.json:
-			match = True
-			if 'user' in user and row['user'] != user['user']:
-				match = False
-			if 'port' in user and row['port'] != user['port']:
-				match = False
-			if match:
+		if user['user'] == '_all_':
+			for row in self.data.json:
 				row.update(up)
-				print("clear user [%s]" % row['user'])
+			print("clear all")
+		else:
+			for row in self.data.json:
+				match = True
+				if 'user' in user and row['user'] != user['user']:
+					match = False
+				if 'port' in user and row['port'] != user['port']:
+					match = False
+				if match:
+					row.update(up)
+					print("clear user [%s]" % row['user'])
 		self.data.save(self.config_path)
 
 	def list_user(self, user):
@@ -209,6 +215,15 @@ class MuMgr(object):
 					muid = user['muid']
 				print("### user [%s] info %s" % (row['user'], self.userinfo(row, muid)))
 
+	def check_all_users(self):
+		self.data.load(self.config_path)
+		for row in self.data.json:
+			if row['month'] >= 0:
+				row['month'] -= 1
+			if row['month'] == 0:
+				row['transfer_enable'] = 0
+				print("%s: %s is now closed" % (row['user'], row['port'] ))
+		self.data.save(self.config_path)
 
 def print_server_help():
 	print('''usage: python mujson_manage.py -a|-d|-e|-c|-l [OPTION]...
@@ -219,6 +234,7 @@ Actions:
   -e                   edit a user
   -c                   set u&d to zero
   -l                   display a user infomation or all users infomation
+  -C                   check all users' availability
 
 Options:
   -u USER              the user name
@@ -234,6 +250,7 @@ Options:
   -i MUID              set sub id to display (only work with -l)
   -s SPEED             set speed_limit_per_con
   -S SPEED             set speed_limit_per_user
+  -M MONTH             available months counter
 
 General options:
   -h, --help           show this help message and exit
@@ -241,7 +258,7 @@ General options:
 
 
 def main():
-	shortopts = 'adeclu:i:p:k:O:o:G:g:m:t:f:hs:S:'
+	shortopts = 'adeclCu:i:p:k:O:o:G:g:m:t:f:hs:S:M:'
 	longopts = ['help']
 	action = None
 	user = {}
@@ -280,6 +297,8 @@ def main():
 				action = 3
 			elif key == '-l':
 				action = 4
+			elif key == '-C':
+				action = 5
 			elif key == '-c':
 				action = 0
 			elif key == '-u':
@@ -322,6 +341,8 @@ def main():
 				except:
 					pass
 				user['transfer_enable'] = int(val * 1024) * (1024 ** 2)
+			elif key == '-M':
+				user['month'] = value
 			elif key in ('-h', '--help'):
 				print_server_help()
 				sys.exit(0)
@@ -351,6 +372,8 @@ def main():
 			print("You have to set the user name or port with -u/-p")
 	elif action == 4:
 		manage.list_user(user)
+	elif action == 5:
+		manage.check_all_users()
 	elif action is None:
 		print_server_help()
 
