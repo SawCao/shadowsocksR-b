@@ -157,6 +157,13 @@ class MuMgr(object):
 				match = False
 			if match:
 				print("edit user [%s]" % (row['user'],))
+				if 'month' in user:
+					if row['month'] < 0:
+						user['month'] = row['month'] + user['month'] + 1
+					else:
+						user['month'] = row['month'] + user['month']
+					if user['month'] > 0:
+						user['transfer_enable'] = int(40 * 1024) * (1024 ** 2)
 				row.update(user)
 				print("### new user info %s" % self.userinfo(row))
 				break
@@ -342,7 +349,7 @@ def main():
 					pass
 				user['transfer_enable'] = int(val * 1024) * (1024 ** 2)
 			elif key == '-M':
-				user['month'] = value
+				user['month'] = int(value)
 			elif key in ('-h', '--help'):
 				print_server_help()
 				sys.exit(0)
