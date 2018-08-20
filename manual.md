@@ -48,10 +48,11 @@ python mujson_mgr.py -a|-d|-e|-c|-l [选项( -u|-p|-k|-m|-O|-o|-G|-g|-t|-f|-i|-s
     端口总限速：1000KB/s
     总流量：10GB
     禁止访问端口：25,465,233-266
+    可用时间：三个月
 ```
 ### 那么命令为：
 ```
-python mujson_mgr.py -a -u lightime -p 3333 -k lighti.me -m chacha20 -O auth_aes128_md5 -G 5 -o tls1.2_ticket_auth_compatible -s 500 -S 1000 -t 10 -f "25,465,233-266"
+python mujson_mgr.py -a -u lightime -p 3333 -k lighti.me -m chacha20 -O auth_aes128_md5 -G 5 -o tls1.2_ticket_auth_compatible -s 500 -S 1000 -t 10 -f "25,465,233-266" -M 3
 ```
 
 #### 添加用户的时候选项 -u 用户名 -p 端口 -k 密码 是必写的，其他参数都有默认值，可忽略。用户名和端口不可冲突添加（添加会提示错误）。
@@ -75,6 +76,7 @@ python mujson_mgr.py -a -u lightime -p 3333 -k lighti.me -m chacha20 -O auth_aes
     forbidden_port : 25,465,233-266      # 禁止访问使用的端口
     speed_limit_per_con : 500            # 单线程限速 500KB/s
     speed_limit_per_user : 1000          # 端口总限速 1000KB/s
+    month: 3                             # 可用时间为三个月
     ssr://XX.XX.XX.XX:3333:auth_aes128_md5:chacha20:tls1.2_ticket_auth:ZG91Yi5pbw
     ssr://XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
