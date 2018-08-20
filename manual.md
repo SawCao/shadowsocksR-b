@@ -1,13 +1,13 @@
 ## 使用说明: 
 ```
-python mujson_mgr.py -a|-d|-e|-c|-l [选项( -u|-p|-k|-m|-O|-o|-G|-g|-t|-f|-i|-s|-S )]
+python mujson_mgr.py -a|-d|-e|-c|-l|-C [选项( -u|-p|-k|-m|-O|-o|-G|-g|-t|-f|-i|-s|-S|-M )]
 ```
 ## 操作:
 ```
   - -a ADD               添加 用户
   - -d DELETE            删除 用户
   - -e EDIT              编辑 用户
-  - -c CLEAR             清零 上传/下载 已使用流量
+  - -c CLEAR             清零 上传/下载 已使用流量(当用户名为 _all_ 时清零所有用户的流量）
   - -l LIST              显示用户信息 或 所有用户信息
   - -C CHECK             检查所有用户的剩余时间并减少一个月，若时间减至 0 则将限制流量设为 0
 ```
