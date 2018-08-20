@@ -110,13 +110,17 @@ python mujson_mgr.py -e -p 3333 -t 100        #以端口修改
 python mujson_mgr.py -d -u lightime   #以用户为依据删除
 python mujson_mgr.py -d -p 3333       #以端口为依据删除
 运行后会提示：delete user [lightime]
+```
 
-给用户增加时间
-根据用户名：python mujson_mgr.py -e -u lightime -M months
-根据端口号：python mujson_mgr.py -e -p 3333 -M months
+## 给用户增加时间
+```
+根据用户名：python mujson_mgr.py -e -u lightime -M months   #以用户为依据删除
+根据端口号：python mujson_mgr.py -e -p 3333 -M months       #以端口为依据删除
 这里的 months 为给用户增加的时间
+```
 
-其他操作
+## 其他操作
+```
 python mujson_mgr.py -l                  #查看所有用户信息
 python mujson_mgr.py -l -u lightime      #查看单个用户信息(包括流量使用情况)
 python mujson_mgr.py -c -u lightime      #用户使用流量清零
