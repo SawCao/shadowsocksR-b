@@ -9,7 +9,7 @@ import getopt
 import sys
 import json
 import base64
-
+import qrcode
 
 class MuJsonLoader(object):
 	def __init__(self):
