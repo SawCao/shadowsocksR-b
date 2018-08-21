@@ -10,6 +10,7 @@ import sys
 import json
 import base64
 import qrcode
+import os
 
 class MuJsonLoader(object):
 	def __init__(self):
@@ -87,10 +88,11 @@ class MuMgr(object):
 		    border=4,
 		)
 		filename = user['user'] + '_qrcode.png'
+		path = os.path.join(os.path.abspath('.'), 'user_qrcode', filename)
 		qr.add_data("ssr://" + common.to_str(base64.urlsafe_b64encode(common.to_bytes(link))).replace("=", ""))
 		qr.make(fit=True)
 		img = qr.make_image()
-		img.save(filename)
+		img.save(path)
 		return "ssr://" + (encode and common.to_str(base64.urlsafe_b64encode(common.to_bytes(link))).replace("=", "") or link)
 
 	def userinfo(self, user, muid = None):
