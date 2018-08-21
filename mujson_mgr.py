@@ -160,16 +160,16 @@ class MuMgr(object):
 		smtp_server = 'smtp.gmail.com'
 		smtp_port = 465
 
-		# 邮件对象:
+		# email entity:
 		msg = MIMEMultipart()
-		msg['From'] = _format_addr('红杏 <%s>' % from_addr)
+		msg['From'] = _format_addr('hongxing <%s>' % from_addr)
 		msg['To'] = _format_addr('%s <%s>' % (to_addr.split('@')[0], to_addr))
 		msg['Subject'] = Header("hongxinglink", 'utf-8').encode()
 
-		# 邮件正文:
-		msg.attach(MIMEText(user['ssrlink'], 'plain', 'utf-8'))
+		# email content:
+		msg.attach(MIMEText(user['ssrlink']+ '\n\n' + 'Tutor: ' + 'https://www.lanzous.com/b348099/\nPassword:16h2', 'plain', 'utf-8'))
 
-		# 添加附件
+		# email attach
 		filename = user['user'] + '_qrcode.png'
 		newpath = os.path.join(os.path.abspath('.'), 'user_qrcode', filename)
 		with open(newpath, 'rb') as f:
