@@ -165,7 +165,8 @@ class MuMgr(object):
         password = raw_input('Password: ')
         to_addr = user['user']
         smtp_server = 'smtp.gmail.com'
-        smtp_port = 465
+        #smtp_port = 465
+        smtp_port = 587
 
         # email entity:
         msg = MIMEMultipart()
@@ -190,8 +191,9 @@ class MuMgr(object):
             encoders.encode_base64(mime)
             msg.attach(mime)
 
-        server = smtplib.SMTP_SSL(smtp_server, smtp_port)
-        # server.starttls()
+        #server = smtplib.SMTP_SSL(smtp_server, smtp_port)
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()
         server.set_debuglevel(1)
         server.login(from_addr, password)
         server.sendmail(from_addr, [to_addr], msg.as_string())
