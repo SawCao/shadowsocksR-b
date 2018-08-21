@@ -151,8 +151,8 @@ class MuMgr(object):
 	def mail_ssrlink(self, user):
 
 		def _format_addr(s):
-    		name, addr = parseaddr(s)
-    		return formataddr((Header(name, 'utf-8').encode(), addr))
+    			name, addr = parseaddr(s)
+    			return formataddr((Header(name, 'utf-8').encode(), addr))
 
 		from_addr = 'jbrolin976@gmail.com'
 		password = input('Password: ')
