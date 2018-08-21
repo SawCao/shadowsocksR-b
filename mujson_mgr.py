@@ -214,6 +214,7 @@ class MuMgr(object):
 		self.data.json.append(up)
 		print("### add user info %s" % result)
 		self.data.save(self.config_path)
+		#mail_ssrlink(up)
 
 	def edit(self, user):
 		self.data.load(self.config_path)
@@ -251,6 +252,9 @@ class MuMgr(object):
 			if match:
 				print("delete user [%s]" % row['user'])
 				del self.data.json[index]
+				filename = user['user'] + '_qrcode.png'
+				path = os.path.join(os.path.abspath('.'), 'user_qrcode', filename)
+				os.remove(path)
 				break
 			index += 1
 		self.data.save(self.config_path)
