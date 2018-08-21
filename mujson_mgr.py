@@ -86,7 +86,7 @@ class MuMgr(object):
 		    box_size=8,
 		    border=4,
 		)
-		filename = user['port] + '_qrcode.png'
+		filename = user['port'] + '_qrcode.png'
 		qr.add_data(shareqrcode_str)
 		qr.make(fit=True)
 		img = qr.make_image()
