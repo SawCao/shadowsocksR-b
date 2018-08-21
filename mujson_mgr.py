@@ -154,11 +154,11 @@ class MuMgr(object):
     		name, addr = parseaddr(s)
     		return formataddr((Header(name, 'utf-8').encode(), addr))
 
-		from_addr = 
+		from_addr = 'jbrolin976@gmail.com'
 		password = input('Password: ')
 		to_addr = user['user']
-		smtp_server = 
-		smtp_port = 
+		smtp_server = 'smtp.gmail.com'
+		smtp_port = 465
 
 		# 邮件对象:
 		msg = MIMEMultipart()
@@ -214,7 +214,7 @@ class MuMgr(object):
 		self.data.json.append(up)
 		print("### add user info %s" % result)
 		self.data.save(self.config_path)
-		#mail_ssrlink(up)
+		mail_ssrlink(up)
 
 	def edit(self, user):
 		self.data.load(self.config_path)
