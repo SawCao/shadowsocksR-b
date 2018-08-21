@@ -53,6 +53,9 @@ python mujson_mgr.py -a|-d|-e|-c|-l|-C [选项( -u|-p|-k|-m|-O|-o|-G|-g|-t|-f|-i
 ### 那么命令为：
 ```
 python mujson_mgr.py -a -u lightime -p 3333 -k lighti.me -m chacha20 -O auth_aes128_md5 -G 5 -o tls1.2_ticket_auth_compatible -s 500 -S 1000 -t 10 -f "25,465,233-266" -M 3
+
+又如：
+python mujson_mgr.py -a -u test0 -p 4000 -k test123 -m chacha20 -O auth_aes128_md5 -G 3 -o tls1.2_ticket_auth_compatible -s 1000 -S 2000 -t 40 -f "25,465,233-266" -M 3
 ```
 
 #### 添加用户的时候选项 -u 用户名 -p 端口 -k 密码 是必写的，其他参数都有默认值，可忽略。用户名和端口不可冲突添加（添加会提示错误）。
