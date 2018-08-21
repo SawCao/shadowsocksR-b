@@ -175,7 +175,7 @@ class MuMgr(object):
 
         # email content:
         msg.attach(
-            MIMEText(user['ssrlink'] + '\n\n' + 'Tutor: ' + 'https://www.lanzous.com/b348099/\nPassword:16h2', 'plain',
+            MIMEText(user['ssrlink'] + '\n\n' + 'Tutor: ' + 'https://www.lanzous.com/b348099/\nPassword: 16h2', 'plain',
                      'utf-8'))
 
         # email attach
