@@ -11,6 +11,14 @@ import json
 import base64
 import qrcode
 import os
+from email import encoders
+from email.header import Header
+from email.mime.text import MIMEText
+from email.utils import parseaddr, formataddr
+from email.mime.multipart import MIMEBase
+from email.mime.multipart import MIMEMultipart
+import smtplib
+
 
 class MuJsonLoader(object):
 	def __init__(self):
@@ -80,19 +88,6 @@ class MuMgr(object):
 						protocol_param = '/?protoparam=' + common.to_str(base64.urlsafe_b64encode(common.to_bytes(param))).replace("=", "")
 						break
 		link = ("%s:%s:%s:%s:%s:%s" % (self.server_addr, user['port'], protocol, user['method'], obfs, common.to_str(base64.urlsafe_b64encode(common.to_bytes(user['passwd']))).replace("=", ""))) + protocol_param
-		##生成二维码
-		qr = qrcode.QRCode(
-		    version=1,
-		    error_correction=qrcode.constants.ERROR_CORRECT_M,
-		    box_size=8,
-		    border=4,
-		)
-		filename = user['user'] + '_qrcode.png'
-		path = os.path.join(os.path.abspath('.'), 'user_qrcode', filename)
-		qr.add_data("ssr://" + common.to_str(base64.urlsafe_b64encode(common.to_bytes(link))).replace("=", ""))
-		qr.make(fit=True)
-		img = qr.make_image()
-		img.save(path)
 		return "ssr://" + (encode and common.to_str(base64.urlsafe_b64encode(common.to_bytes(link))).replace("=", "") or link)
 
 	def userinfo(self, user, muid = None):
@@ -132,11 +127,67 @@ class MuMgr(object):
 			else:
 				ret += "    %s : %s" % (key, user[key])
 		ret += "\n    " + self.ssrlink(user, False, muid)
-		ret += "\n    " + self.ssrlink(user, True, muid)
-		return ret
+		ssrlinkencoded = self.ssrlink(user, True, muid)
+		ret += "\n    " + ssrlinkencoded
+		##生成二维码
+		qr = qrcode.QRCode(
+		    version=1,
+		    error_correction=qrcode.constants.ERROR_CORRECT_M,
+		    box_size=8,
+		    border=4,
+		)
+		filename = user['user'] + '_qrcode.png'
+		path = os.path.join(os.path.abspath('.'), 'user_qrcode', filename)
+		qr.add_data(ssrlinkencoded)
+		qr.make(fit=True)
+		img = qr.make_image()
+		img.save(path)
+		
+		return ret, ssrlinkencoded
 
 	def rand_pass(self):
 		return ''.join([random.choice('''ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~-_=+(){}[]^&%$@''') for i in range(8)])
+
+	def mail_ssrlink(self, user):
+
+		def _format_addr(s):
+    		name, addr = parseaddr(s)
+    		return formataddr((Header(name, 'utf-8').encode(), addr))
+
+		from_addr = 
+		password = input('Password: ')
+		to_addr = user['user']
+		smtp_server = 
+		smtp_port = 
+
+		# 邮件对象:
+		msg = MIMEMultipart()
+		msg['From'] = _format_addr('红杏 <%s>' % from_addr)
+		msg['To'] = _format_addr('%s <%s>' % (to_addr.split('@')[0], to_addr))
+		msg['Subject'] = Header("hongxinglink", 'utf-8').encode()
+
+		# 邮件正文:
+		msg.attach(MIMEText(user['ssrlink'], 'plain', 'utf-8'))
+
+		# 添加附件
+		filename = user['user'] + '_qrcode.png'
+		newpath = os.path.join(os.path.abspath('.'), 'user_qrcode', filename)
+		with open(newpath, 'rb') as f:
+    		mime = MIMEBase('image', 'png', filename=filename)
+    		mime.add_header('Content-Disposition', 'attachment', filename=filename)
+    		mime.add_header('Content-ID', '<0>')
+    		mime.add_header('X-Attachment-Id', '0')
+    		mime.set_payload(f.read())
+    		encoders.encode_base64(mime)
+    		msg.attach(mime)
+
+		server = smtplib.SMTP_SSL(smtp_server, smtp_port)
+		#server.starttls()
+		server.set_debuglevel(1)
+		server.login(from_addr, password)
+		server.sendmail(from_addr, [to_addr], msg.as_string())
+		server.quit()
+
 
 	def add(self, user):
 		up = {'enable': 1, 'u': 0, 'd': 0, 'method': "aes-128-ctr",
@@ -157,8 +208,11 @@ class MuMgr(object):
 			if match:
 				print("user [%s] port [%s] already exist" % (row['user'], row['port']))
 				return
+		
+		result, ssrlinkencoded = self.userinfo(up)
+		up['ssrlink'] = ssrlinkencoded
 		self.data.json.append(up)
-		print("### add user info %s" % self.userinfo(up))
+		print("### add user info %s" % result)
 		self.data.save(self.config_path)
 
 	def edit(self, user):
@@ -178,8 +232,10 @@ class MuMgr(object):
 						user['month'] = row['month'] + user['month']
 					if user['month'] > 0:
 						user['transfer_enable'] = int(40 * 1024) * (1024 ** 2)
+				result, ssrlinkencoded = self.userinfo(row)
+				user['ssrlink'] = ssrlinkencoded
 				row.update(user)
-				print("### new user info %s" % self.userinfo(row))
+				print("### new user info %s" % result)
 				break
 		self.data.save(self.config_path)
 
@@ -234,7 +290,8 @@ class MuMgr(object):
 				muid = None
 				if 'muid' in user:
 					muid = user['muid']
-				print("### user [%s] info %s" % (row['user'], self.userinfo(row, muid)))
+				result, ssrlinkencoded = self.userinfo(row, muid)
+				print("### user [%s] info %s" % (row['user'], result))
 
 	def check_all_users(self):
 		self.data.load(self.config_path)
