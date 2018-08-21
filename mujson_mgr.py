@@ -87,7 +87,7 @@ class MuMgr(object):
 		    border=4,
 		)
 		filename = user['user'] + '_qrcode.png'
-		qr.add_data(link)
+		qr.add_data("ssr://" + (encode and common.to_str(base64.urlsafe_b64encode(common.to_bytes(link))).replace("=", ""))
 		qr.make(fit=True)
 		img = qr.make_image()
 		img.save(filename)
