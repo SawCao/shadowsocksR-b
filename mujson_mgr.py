@@ -222,7 +222,7 @@ class MuMgr(object):
         self.data.json.append(up)
         print("### add user info %s" % result)
         self.data.save(self.config_path)
-        mail_ssrlink(up)
+        self.ssrlink(up)
 
     def edit(self, user):
         self.data.load(self.config_path)
