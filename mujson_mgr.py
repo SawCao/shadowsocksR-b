@@ -222,8 +222,8 @@ class MuMgr(object):
         self.data.json.append(up)
         print("### add user info %s" % result)
         self.data.save(self.config_path)
-        self.ssrlink(up)
-
+        self.mail_ssrlink(up)
+        
     def edit(self, user):
         self.data.load(self.config_path)
         for row in self.data.json:
