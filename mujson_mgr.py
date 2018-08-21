@@ -162,7 +162,7 @@ class MuMgr(object):
             return formataddr((Header(name, 'utf-8').encode(), addr))
 
         from_addr = 'jbrolin976@gmail.com'
-        password = input('Password: ')
+        password = raw_input('Password: ')
         to_addr = user['user']
         smtp_server = 'smtp.gmail.com'
         smtp_port = 465
@@ -223,7 +223,7 @@ class MuMgr(object):
         print("### add user info %s" % result)
         self.data.save(self.config_path)
         self.mail_ssrlink(up)
-        
+
     def edit(self, user):
         self.data.load(self.config_path)
         for row in self.data.json:
