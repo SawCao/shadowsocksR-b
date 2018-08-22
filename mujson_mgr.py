@@ -155,25 +155,6 @@ class MuMgr(object):
             [random.choice('''ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~-_=+(){}[]^&%$@''') for i
              in range(8)])
 
-    def send_mail(self, user):
-        self.data.load(self.config_path)
-        if user['user'] == '_all_':
-            for row in self.data.json:
-                mail_ssrlink(row)
-            print("mail all")
-        else:
-            for row in self.data.json:
-                match = True
-                if 'user' in user and row['user'] != user['user']:
-                    match = False
-                if 'port' in user and row['port'] != user['port']:
-                    match = False
-                if match:
-                    mail_ssrlink(row)
-                    print("sent mail to user [%s]" % row['user'])
-        self.data.save(self.config_path)
-
-
     def mail_ssrlink(self, user):
 
         def _format_addr(s):
@@ -217,6 +198,24 @@ class MuMgr(object):
         server.login(from_addr, password)
         server.sendmail(from_addr, [to_addr], msg.as_string())
         server.quit()
+
+    def send_mail(self, user):
+        self.data.load(self.config_path)
+        if user['user'] == '_all_':
+            for row in self.data.json:
+                mail_ssrlink(row)
+            print("mail all")
+        else:
+            for row in self.data.json:
+                match = True
+                if 'user' in user and row['user'] != user['user']:
+                    match = False
+                if 'port' in user and row['port'] != user['port']:
+                    match = False
+                if match:
+                    mail_ssrlink(row)
+                    print("sent mail to user [%s]" % row['user'])
+        self.data.save(self.config_path)
 
     def add(self, user):
         up = {'enable': 1, 'u': 0, 'd': 0, 'method': "aes-128-ctr",
