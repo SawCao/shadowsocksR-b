@@ -213,7 +213,7 @@ class MuMgr(object):
                 if 'port' in user and row['port'] != user['port']:
                     match = False
                 if match:
-                    mail_ssrlink(row)
+                    self.mail_ssrlink(row)
                     print("sent mail to user [%s]" % row['user'])
         self.data.save(self.config_path)
 
