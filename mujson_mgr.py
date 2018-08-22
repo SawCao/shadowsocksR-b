@@ -155,6 +155,25 @@ class MuMgr(object):
             [random.choice('''ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~-_=+(){}[]^&%$@''') for i
              in range(8)])
 
+    def send_mail(self, user):
+        self.data.load(self.config_path)
+        if user['user'] == '_all_':
+            for row in self.data.json:
+                mail_ssrlink(row)
+            print("mail all")
+        else:
+            for row in self.data.json:
+                match = True
+                if 'user' in user and row['user'] != user['user']:
+                    match = False
+                if 'port' in user and row['port'] != user['port']:
+                    match = False
+                if match:
+                    mail_ssrlink(row)
+                    print("sent mail to user [%s]" % row['user'])
+        self.data.save(self.config_path)
+
+
     def mail_ssrlink(self, user):
 
         def _format_addr(s):
@@ -328,9 +347,10 @@ Actions:
   -a                   add/edit a user
   -d                   delete a user
   -e                   edit a user
-  -c                   set u&d to zero
+  -c                   set u&d to zero(_all_ represents all users)
   -l                   display a user infomation or all users infomation
   -C                   check all users' availability
+  -E                   manually send an config email to a user(_all_ represents all users)
 
 Options:
   -u USER              the user name
@@ -354,7 +374,7 @@ General options:
 
 
 def main():
-    shortopts = 'adeclCu:i:p:k:O:o:G:g:m:t:f:hs:S:M:'
+    shortopts = 'adeclCEu:i:p:k:O:o:G:g:m:t:f:hs:S:M:'
     longopts = ['help']
     action = None
     user = {}
@@ -395,6 +415,8 @@ def main():
                 action = 4
             elif key == '-C':
                 action = 5
+            elif key == '-C':
+                action = 6
             elif key == '-c':
                 action = 0
             elif key == '-u':
@@ -470,6 +492,8 @@ def main():
         manage.list_user(user)
     elif action == 5:
         manage.check_all_users()
+    elif action == 6:
+        manage.send_mail(user)
     elif action is None:
         print_server_help()
 
