@@ -203,8 +203,8 @@ class MuMgr(object):
         self.data.load(self.config_path)
         if user['user'] == '_all_':
             for row in self.data.json:
-                mail_ssrlink(row)
-            print("mail all")
+                self.mail_ssrlink(row)
+            print("sent mail to all")
         else:
             for row in self.data.json:
                 match = True
