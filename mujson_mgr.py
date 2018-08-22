@@ -237,12 +237,12 @@ class MuMgr(object):
             if match:
                 print("edit user [%s]" % (row['user'],))
                 if 'month' in user:
-                    if row['month'] < 0:
-                        user['month'] = row['month'] + user['month'] + 1
+                    if row['month'] < 0:#update row directly via user
+                        if user['month'] > 0:
+                        user['transfer_enable'] = int(40 * 1024) * (1024 ** 2)
+                        print("%s is now back to life" % row['user'])
                     else:
                         user['month'] = row['month'] + user['month']
-                    if user['month'] > 0:
-                        user['transfer_enable'] = int(40 * 1024) * (1024 ** 2)
                 result, ssrlinkencoded = self.userinfo(row)
                 user['ssrlink'] = ssrlinkencoded
                 row.update(user)
