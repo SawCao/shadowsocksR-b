@@ -415,7 +415,7 @@ def main():
                 action = 4
             elif key == '-C':
                 action = 5
-            elif key == '-C':
+            elif key == '-E':
                 action = 6
             elif key == '-c':
                 action = 0
