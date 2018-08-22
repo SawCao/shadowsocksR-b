@@ -237,12 +237,15 @@ class MuMgr(object):
             if match:
                 print("edit user [%s]" % (row['user'],))
                 if 'month' in user:
-                    if row['month'] < 0:#update row directly via user
+                    if row['month'] < 0: #update row directly via user
                         if user['month'] > 0:
                         user['transfer_enable'] = int(40 * 1024) * (1024 ** 2)
                         print("%s is now back to life" % row['user'])
                     else:
                         user['month'] = row['month'] + user['month']
+                        if user['month'] <= 0:
+                            user['transfer_enable'] = 0
+                            print("%s: %s is now closed" % (row['user'], row['port']))
                 result, ssrlinkencoded = self.userinfo(row)
                 user['ssrlink'] = ssrlinkencoded
                 row.update(user)
@@ -262,7 +265,7 @@ class MuMgr(object):
             if match:
                 print("delete user [%s]" % row['user'])
                 del self.data.json[index]
-                filename = user['user'] + '_qrcode.png'
+                filename = row['user'] + '_qrcode.png'
                 path = os.path.join(os.path.abspath('.'), 'user_qrcode', filename)
                 os.remove(path)
                 break
