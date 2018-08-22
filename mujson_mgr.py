@@ -492,7 +492,10 @@ def main():
     elif action == 5:
         manage.check_all_users()
     elif action == 6:
-        manage.send_mail(user)
+        if 'user' in user or 'port' in user:
+            manage.send_mail(user)
+        else:
+            print("You have to set the user name or port with -u/-p")
     elif action is None:
         print_server_help()
 
