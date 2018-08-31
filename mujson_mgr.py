@@ -162,7 +162,7 @@ class MuMgr(object):
             return formataddr((Header(name, 'utf-8').encode(), addr))
 
         from_addr = 'jbrolin976@gmail.com'
-        password = raw_input('Password: ')
+        password = 'hx19898989'
         to_addr = user['user']
         smtp_server = 'smtp.gmail.com'
         #smtp_port = 465
