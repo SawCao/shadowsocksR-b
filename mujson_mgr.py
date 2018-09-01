@@ -224,6 +224,7 @@ class MuMgr(object):
               'transfer_enable': 9007199254740992,
               'month': 0}
         up['passwd'] = self.rand_pass()
+        user['month'] = user['month'] * 31
         up.update(user)
 
         self.data.load(self.config_path)
@@ -257,10 +258,11 @@ class MuMgr(object):
                 if 'month' in user:
                     if row['month'] < 0: #update row directly via user
                         if user['month'] > 0:
+                            user['month'] = user['month'] * 31
                             user['transfer_enable'] = int(40 * 1024) * (1024 ** 2)
                             print("%s is now back to life" % row['user'])
                     else:
-                        user['month'] = row['month'] + user['month']
+                        user['month'] = row['month'] + user['month']*31
                         if user['month'] <= 0:
                             user['transfer_enable'] = 0
                             print("%s: %s is now closed" % (row['user'], row['port']))
