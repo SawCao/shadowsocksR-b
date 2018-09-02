@@ -266,9 +266,9 @@ class MuMgr(object):
                         if user['month'] <= 0:
                             user['transfer_enable'] = 0
                             print("%s: %s is now closed" % (row['user'], row['port']))
-                result, ssrlinkencoded = self.userinfo(row)
-                user['ssrlink'] = ssrlinkencoded
                 row.update(user)
+                result, ssrlinkencoded = self.userinfo(row)
+                row['ssrlink'] = ssrlinkencoded
                 print("### new user info %s" % result)
                 break
         self.data.save(self.config_path)
