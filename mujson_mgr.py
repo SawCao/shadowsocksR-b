@@ -167,7 +167,7 @@ class MuMgr(object):
             name, addr = parseaddr(s)
             return formataddr((Header(name, 'utf-8').encode(), addr))
 
-        from_addr = const.mail
+        from_addr = const.email
         password = const.password
         to_addr = user['user']
         smtp_server = 'smtp.gmail.com'
