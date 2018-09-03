@@ -18,6 +18,7 @@ from email.utils import parseaddr, formataddr
 from email.mime.multipart import MIMEBase
 from email.mime.multipart import MIMEMultipart
 import smtplib
+import re
 
 
 class MuJsonLoader(object):
@@ -213,8 +214,11 @@ class MuMgr(object):
                 if 'port' in user and row['port'] != user['port']:
                     match = False
                 if match:
-                    self.mail_ssrlink(row)
-                    print("sent mail to user [%s]" % row['user'])
+                	if re.match(r'.+@.+', test):
+                		self.mail_ssrlink(row)
+                		print("sent mail to user [%s]" % row['user'])
+                	else:
+                		print("Error occured! The username is not a valid email address.")
         self.data.save(self.config_path)
 
     def add(self, user):
@@ -243,7 +247,8 @@ class MuMgr(object):
         self.data.json.append(up)
         print("### add user info %s" % result)
         self.data.save(self.config_path)
-        self.mail_ssrlink(up)
+        if re.match(r'.+@.+', up['user']):
+        	self.mail_ssrlink(up)
 
     def edit(self, user):
         self.data.load(self.config_path)
