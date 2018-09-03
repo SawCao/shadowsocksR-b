@@ -168,7 +168,7 @@ class MuMgr(object):
             return formataddr((Header(name, 'utf-8').encode(), addr))
 
         from_addr = const.email
-        password = const.password
+        password = const.mailPassword
         to_addr = user['user']
         smtp_server = 'smtp.gmail.com'
         #smtp_port = 465
@@ -176,9 +176,9 @@ class MuMgr(object):
 
         # email entity:
         msg = MIMEMultipart()
-        msg['From'] = _format_addr('hongxing <%s>' % from_addr)
+        msg['From'] = _format_addr(const.mailFrom + ' <%s>' % from_addr)
         msg['To'] = _format_addr('%s <%s>' % (to_addr.split('@')[0], to_addr))
-        msg['Subject'] = Header("hongxinglink", 'utf-8').encode()
+        msg['Subject'] = Header(const.mailSubject, 'utf-8').encode()
 
         # email content:
         msg.attach(
