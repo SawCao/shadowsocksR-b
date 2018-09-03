@@ -158,6 +158,10 @@ class MuMgr(object):
 
     def mail_ssrlink(self, user):
 
+        if not re.match(r'.+@.+', user['user']):
+            print("Error occured! %s is not a valid email address." % user['user'])
+            return
+
         def _format_addr(s):
             name, addr = parseaddr(s)
             return formataddr((Header(name, 'utf-8').encode(), addr))
@@ -214,11 +218,8 @@ class MuMgr(object):
                 if 'port' in user and row['port'] != user['port']:
                     match = False
                 if match:
-                	if re.match(r'.+@.+', row['user']):
-                		self.mail_ssrlink(row)
-                		print("sent mail to user [%s]" % row['user'])
-                	else:
-                		print("Error occured! The username is not a valid email address.")
+                    self.mail_ssrlink(row)
+                    print("sent mail to user [%s]" % row['user'])
         self.data.save(self.config_path)
 
     def add(self, user):
@@ -247,8 +248,7 @@ class MuMgr(object):
         self.data.json.append(up)
         print("### add user info %s" % result)
         self.data.save(self.config_path)
-        if re.match(r'.+@.+', up['user']):
-        	self.mail_ssrlink(up)
+        self.mail_ssrlink(up)
 
     def edit(self, user):
         self.data.load(self.config_path)
