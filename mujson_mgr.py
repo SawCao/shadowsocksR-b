@@ -19,6 +19,7 @@ from email.mime.multipart import MIMEBase
 from email.mime.multipart import MIMEMultipart
 import smtplib
 import re
+from CONST import const
 
 
 class MuJsonLoader(object):
@@ -166,8 +167,8 @@ class MuMgr(object):
             name, addr = parseaddr(s)
             return formataddr((Header(name, 'utf-8').encode(), addr))
 
-        from_addr = 'jbrolin976@gmail.com'
-        password = 'hx19898989'
+        from_addr = const.mail
+        password = const.password
         to_addr = user['user']
         smtp_server = 'smtp.gmail.com'
         #smtp_port = 465
@@ -181,7 +182,7 @@ class MuMgr(object):
 
         # email content:
         msg.attach(
-            MIMEText(user['ssrlink'] + '\n\n' + 'Tutor: ' + 'https://www.lanzous.com/b348099/\nPassword: 16h2', 'plain',
+            MIMEText(user['ssrlink'] + '\n\n' + const.mailContent, 'plain',
                      'utf-8'))
 
         # email attach
