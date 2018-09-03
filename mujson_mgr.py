@@ -207,7 +207,7 @@ class MuMgr(object):
 
     def send_mail(self, user):
         self.data.load(self.config_path)
-        if user['user'] == '_all_':
+        if 'user' in user and user['user'] == '_all_':
             for row in self.data.json:
                 self.mail_ssrlink(row)
             print("sent mail to all")
