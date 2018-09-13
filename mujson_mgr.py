@@ -247,9 +247,9 @@ class MuMgr(object):
         result, ssrlinkencoded = self.userinfo(up)
         up['ssrlink'] = ssrlinkencoded
         self.data.json.append(up)
+        self.mail_ssrlink(up)
         print("### add user info %s" % result)
         self.data.save(self.config_path)
-        self.mail_ssrlink(up)
 
     def edit(self, user):
         self.data.load(self.config_path)
