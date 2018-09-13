@@ -230,7 +230,8 @@ class MuMgr(object):
               'transfer_enable': 9007199254740992,
               'month': 0}
         up['passwd'] = self.rand_pass()
-        user['month'] = user['month'] * 31
+        if 'month' in user:
+            user['month'] = user['month'] * 31
         up.update(user)
 
         self.data.load(self.config_path)
